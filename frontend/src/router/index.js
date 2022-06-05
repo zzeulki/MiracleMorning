@@ -20,6 +20,7 @@ const routes = [
   },
   // account
   Account.SignUpRoute,
+  Account.initSetRoute,
   // record
   Record.RecordDetailRoute,
   Record.RecordSummaryRoute
