@@ -27,7 +27,9 @@ export default {
 .header-box {
   height: 15.55vw;
   flex: initial !important;
-  border-bottom: 1px solid rgba(0, 0 ,0 , 0.2)
+  border-bottom: 1px solid rgba(0, 0 ,0 , 0.2);
+  font-size: 5.2vw;
+  font-weight: 600;
 }
 
 .back-btn-box {
@@ -42,6 +44,10 @@ export default {
   padding: 1vw !important;
   background-color: transparent !important;
   box-shadow: none;
+}
+
+.v-icon {
+  font-size: 6.5vw !important;
 }
 
 .header-text {
