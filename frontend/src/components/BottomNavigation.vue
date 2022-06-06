@@ -9,7 +9,7 @@
       <v-icon>mdi-home</v-icon>
     </v-btn>
 
-    <v-btn value="calendar" @click="movePage('RecordSummary')">
+    <v-btn value="calendar" @click="movePage('RecordCalendar')">
       <span>캘린더</span>
       <v-icon>mdi-calendar</v-icon>
     </v-btn>
