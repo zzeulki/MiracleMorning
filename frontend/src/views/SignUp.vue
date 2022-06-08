@@ -3,7 +3,7 @@
     <h1 style="font-weight:700" >안녕하세요?</h1>
     <h1 class=name_lavel>당신의 이름은</h1>
     <div class=name_input>
-      <input style="height:6vh; border:3px solid #000000; text-align:center; border-radius: 10px;" type="text" placeholder="미라클모닝">
+      <input id="nickName" style="height:6vh; border:3px solid #000000; text-align:center; border-radius: 10px;" type="text" placeholder="미라클모닝">
     </div>
     <h1 class=name_lavel_2> 입니다.</h1>
     <v-btn class=next_btn @click="movePage('InitSetUp')">
@@ -16,7 +16,12 @@
 export default {
   methods: {
     movePage (name) {
-      if (name !== this.$route.name) this.$router.push({ name: name })
+      const NickName = document.getElementById('nickName').value
+      if (NickName === '') alert('이름을 입력해주세요')
+      else if (name !== this.$route.name) {
+        console.log(NickName)
+        this.$router.push({ name: name, params: { initName: NickName } })
+      }
     }
   }
 }
