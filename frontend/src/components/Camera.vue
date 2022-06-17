@@ -17,7 +17,6 @@ const userMedia = navigator.mediaDevices.getUserMedia({
 userMedia.then(function (stream) {
   const video = document.getElementById('video')
   const videoTracks = stream.getVideoTracks()[0]
-  console.log('cccc : ' + videoTracks.label)
   video.srcObject = stream
 }).catch(function (error) {
   console.error(error.message)
