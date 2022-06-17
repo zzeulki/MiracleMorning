@@ -21,7 +21,7 @@
         class="completion-btn"
         dark
         depressed
-        @click="saveRecord()"
+        @click="dbTest()"
       >완료</v-btn>
     </div>
     <v-dialog
@@ -58,6 +58,8 @@
 </template>
 
 <script>
+import { ref, push, set } from 'firebase/database'
+
 export default {
   data () {
     return {
@@ -70,8 +72,44 @@ export default {
   },
   methods: {
     saveRecord () {
-      this.isRecordDialog = true
-      // alert('사진, 코멘트 저장!')
+      // firebase 테스트
+      const userKey = '강슬기'
+      const recordDateTime = '2022-06-18 07:02'
+      const image = 'base64'
+      const comment = '성공!'
+      const location = '위치'
+      // 사진, 코멘트 저장
+      const recordRef = ref(this.$database, 'users/' + userKey + '/record')
+      const recordDateTimeRef = ref(this.$database, 'users/' + userKey + '/record' + recordDateTime)
+      set(recordRef, recordDateTime).then(() => {
+        push(recordDateTimeRef, {
+          image: image,
+          comment: comment,
+          location: location
+        }).then(() => {
+          alert('저장완료!')
+        }).catch((error) => console.log(error))
+      }).catch((error) => {
+        console.log(error)
+      })
+      // 기록 상세 dialog 테스트
+      // this.isRecordDialog = true
+    },
+    dbTest () {
+      // firebase 테스트
+      const userKey = '강슬기'
+      // const targetTime = '06:00'
+      const recordDateTime = '2022-06-18 06:02'
+      const image = 'base64image'
+      const comment = '미라클 모닝 두번째 성공!'
+      const location = '서울222'
+      // set(ref(this.$database, 'users/' + userKey + '/targetTime'), targetTime).then(() => console.log('success')).catch(() => console.log('error'))
+      // set(ref(this.$database, 'users/' + userKey + '/record'), recordDateTime).then(() => console.log('success')).catch(() => console.log('error'))
+      push(ref(this.$database, 'users/' + userKey + '/record/' + recordDateTime), {
+        image: image,
+        comment: comment,
+        location: location
+      }).then(() => console.log('success')).catch(() => console.log('error'))
     }
   }
 }
