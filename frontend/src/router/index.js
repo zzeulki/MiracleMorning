@@ -23,7 +23,6 @@ const routes = [
   Account.initSetRoute,
   // record
   Record.RecordDetailRoute,
-  Record.RecordSummaryRoute,
   Record.RecordCalendarRoute
 ]
 

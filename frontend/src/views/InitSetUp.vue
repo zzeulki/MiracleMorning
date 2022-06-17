@@ -1,7 +1,7 @@
 
 <template>
   <div class='init_account'>
-    <h1 style="font-weight:700">{{initName}}님</h1>
+    <h1 style="font-weight:700">{{$route.params.initName}}님</h1>
     <h1 style="font-weight:700; margin-left:10vw;">기적의 시간을</h1>
     <h1 style="font-weight:700; margin-left:20vw;">설정해주세요.</h1>
     <div class="set-timepicker-box m-t-vw-10">
