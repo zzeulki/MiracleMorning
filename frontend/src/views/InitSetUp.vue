@@ -18,6 +18,8 @@
 
 <script>
 import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
+import * as db from 'firebase/database'
+
 export default {
   components: {
     VueTimepicker
@@ -38,8 +40,14 @@ export default {
       }
     }
   },
-  created () {
-    console.log(this.NickName_)
+  methods: {
+    movePage () {
+      const time = this.timeValue
+      const time_ = time.hh + ':' + time.mm + ' ' + time.A
+      db.update(db.ref(this.$firebaseDB, 'users/' + this.initName), {
+        targetTime: time_
+      })
+    }
   }
 }
 </script>
