@@ -22,6 +22,7 @@ export default {
       isVisibleHeader: false,
       isVisibleBackBtn: false,
       isVisibleBottomNavigation: false
-    }
+    },
+    props: true
   }
 }
