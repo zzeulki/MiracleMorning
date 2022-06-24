@@ -35,6 +35,7 @@
               :events="events"
               locale="ko"
               @change="getEvents"
+              @click:date="clickDay"
             ></v-calendar>
           </v-sheet>
         </v-col>
@@ -45,6 +46,8 @@
 
 <script>
 import DateUtils from '../utils/date' // 날짜 형식 변환 utils
+// import * as db from 'firebase/database'
+import { getDatabase, ref, onValue } from 'firebase/database'
 
 export default {
   name: 'RecordCalendar',
@@ -82,6 +85,23 @@ export default {
         timed: false
       })
       this.events = events
+    },
+    clickDay (date) {
+      // 날짜 클릭 시 해당 일자 정보 가지고 오기
+      alert('year : ' + date.year +
+       ' month : ' + date.month +
+       ' day : ' + date.day)
+      this.testDbFunc()
+    },
+    testDbFunc () {
+      // firebase realdatabase에서 데이터 가지고 오기
+      const db = getDatabase()
+      var id = 'test'
+      const starCountRef = ref(db, 'users/' + id)
+      onValue(starCountRef, (snapshot) => {
+        const data = snapshot.val()
+        alert(data.targetTime)
+      })
     }
   },
   created () {
