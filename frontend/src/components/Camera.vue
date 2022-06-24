@@ -24,12 +24,24 @@ const userMedia = navigator.mediaDevices.getUserMedia({
     facinMode: 'environment'
   }
 })
+
 userMedia.then(function (stream) {
   const video = document.getElementById('video')
   video.srcObject = stream
 }).catch(function (error) {
   console.error(error.message)
 })
+
+function getDate () {
+  var todayDate = new Date().toISOString().slice(0, 10)
+  return todayDate
+}
+
+function getLocation () {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(resolve, reject)
+  })
+}
 
 export default {
   name: 'Camera',
@@ -39,7 +51,7 @@ export default {
     }
   },
   methods: {
-    captureImage: function () {
+    captureImage: async function () {
       this.isImageCaptured = true
       const context = this.$refs.canvas.getContext('2d')
       const myImage = this.$refs.video
@@ -48,6 +60,8 @@ export default {
       tracks.forEach(track => {
         track.stop()
       })
+      console.log(getDate())
+      getLocation().then(console.log)
     },
     downloadImage: function () {
       const download = document.getElementById('downloadImage')
