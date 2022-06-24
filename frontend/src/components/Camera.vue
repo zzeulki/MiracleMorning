@@ -1,7 +1,19 @@
 <template>
-  <div class="home">
-    <video id="video" autoplay playsinline></video>
-    <button class="capture-btn" onclick="capture">📸</button>
+  <div class="camera-view">
+    <div class="wrapper">
+      <div class="video-container">
+        <video v-show="!isImageCaptured" id="video" ref="video" width="300" height="400" autoplay playsinline ></video>
+        <canvas v-show="isImageCaptured" id="canvas" ref="canvas" width="300" height="400" ></canvas>
+      </div>
+       <button v-if="!isImageCaptured" class="capture-btn" v-on:click="captureImage" >
+        <span>Capture</span>
+       </button>
+       <button v-show="isImageCaptured" class="image-download">
+        <a id="downloadImage" download="myImage.jpg" class="button" v-on:click="downloadImage">
+          Download
+        </a>
+       </button>
+    </div>
   </div>
 </template>
 
@@ -9,8 +21,6 @@
 const userMedia = navigator.mediaDevices.getUserMedia({
   audio: false,
   video: {
-    width: 375,
-    height: 500,
     facinMode: 'environment'
   }
 })
@@ -25,7 +35,24 @@ export default {
   name: 'Camera',
   data () {
     return {
-      showCamera: false
+      isImageCaptured: false
+    }
+  },
+  methods: {
+    captureImage: function () {
+      this.isImageCaptured = true
+      const context = this.$refs.canvas.getContext('2d')
+      const myImage = this.$refs.video
+      context.drawImage(myImage, 0, 0, 300, 400)
+      const tracks = this.$refs.video.srcObject.getTracks()
+      tracks.forEach(track => {
+        track.stop()
+      })
+    },
+    downloadImage: function () {
+      const download = document.getElementById('downloadImage')
+      const canvas = document.getElementById('canvas').toDataURL('image/jpeg').replace('image/jpeg', 'image/octet-stream')
+      download.setAttribute('href', canvas)
     }
   }
 }
@@ -37,10 +64,16 @@ export default {
     -webkit-transform: rotateY(180deg);
     padding: 2vw !important;
   }
+  canvas {
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+  }
   .capture-btn {
-    font-size: 10vw !important;
-    width: 10vw !important;
-    height: 10vw !important;
+    font-size: 5vw !important;
+    width: 30vw !important;
+    height: 15vw !important;
     padding: 2vw !important;
+    color: white;
+    background-color: black;
 }
 </style>
