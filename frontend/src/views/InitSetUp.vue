@@ -44,7 +44,8 @@ export default {
     movePage () {
       const time = this.timeValue
       const time_ = time.hh + ':' + time.mm + ' ' + time.A
-      db.update(db.ref(this.$database, 'users/' + this.initName), {
+      db.set(db.ref(this.$database, 'users/' + this.initName), {
+        nickName: this.initName,
         targetTime: time_
       })
     }

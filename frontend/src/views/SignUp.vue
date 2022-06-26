@@ -13,8 +13,6 @@
 </template>
 
 <script>
-import * as db from 'firebase/database'
-
 export default {
   mounted () {
   },
@@ -23,9 +21,6 @@ export default {
       const NickName = document.getElementById('nickName').value
       if (NickName === '') alert('이름을 입력해주세요')
       else if (name !== this.$route.name) {
-        db.set(db.ref(this.$database, 'users/' + NickName), {
-          nickName: NickName
-        })
         this.$router.push({ name: name, params: { initName: NickName } })
       }
     }
