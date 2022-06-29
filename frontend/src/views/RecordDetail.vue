@@ -2,11 +2,15 @@
   <div class="all-layout p-a-vw-10">
     <!-- 사진, 코멘트 기록 확인 화면(ji) -->
     <div class="contents-box">
-      <div class="datetime-box align-a-center m-b-vw-10">2022년 5월 21일 07:59 AM</div>
+      <div class="datetime-box align-a-center m-b-vw-5">{{ dateTimeTitle }}</div>
+      <div class="align-x-right align-y-center m-b-vw-5 location-box">
+        <div class="align-a-center"><v-icon class="location-icon">place</v-icon></div>
+        <div class="location-title">{{ location }}</div>
+      </div>
       <div class="img-box m-y-vw-10 align-a-center">사진</div>
       <div class="comment-box align-a-center">
         <v-textarea
-          v-model="coment"
+          v-model="comment"
           outlined
           rows="6"
           no-resize
@@ -21,95 +25,55 @@
         class="completion-btn"
         dark
         depressed
-        @click="dbTest()"
+        @click="saveRecord()"
       >완료</v-btn>
     </div>
-    <v-dialog
-      v-model="isRecordDialog"
-      transition="dialog-bottom-transition"
-    >
-      <v-card>
-        <div class="align-a-center dialog-header-box p-a-0">2022년 5월 21일 07:59 AM</div>
-        <v-divider></v-divider>
-        <div class="dialog-content-box">
-          <div class="img-box m-b-vw-10 align-a-center">사진</div>
-          <div class="comment-box align-a-center">
-            <v-textarea
-              v-model="coment"
-              outlined
-              rows="6"
-              no-resize
-              readonly
-              hide-details
-            ></v-textarea>
-          </div>
-          <div class="align-a-center">
-          <v-btn
-            class="dialog-close-btn"
-            dark
-            depressed
-            @click="isRecordDialog = false"
-          >닫기</v-btn>
-        </div>
-        </div>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
 <script>
-import { ref, push, set } from 'firebase/database'
+import { ref, set } from 'firebase/database'
+import DateUtils from '../utils/date'
 
 export default {
   data () {
     return {
-      coment: '',
+      recordDate: '2022-07-02', // 전달받아야 할 것
+      base64Image: '굿모닝사진', // 전달받아야 할 것
+      location: '서울 @@구 @@동 123', // 전달받아야 할 것
+      time: '05:00', // 전달받아야 할 것
+      comment: '',
+      userKey: 'test', // 전역에서 구할 것
       rules: {
         maxLength: [value => value.length <= 200 || '200자까지 입력 가능합니다.']
       },
       isRecordDialog: false
     }
   },
+  computed: {
+    isContentReady () {
+      if (this.userKey === '' || this.recordDate === '' || this.base64Image === '' || this.location === '' || this.time === '') return false
+      else return true
+    },
+    dateTimeTitle () {
+      return DateUtils.convertKorDateFromDash(this.recordDate) + ' ' + DateUtils.getAMPMTimeFrom24hTime(this.time)
+    }
+  },
   methods: {
     saveRecord () {
-      // firebase 테스트
-      const userKey = '강슬기'
-      const recordDateTime = '2022-06-18 07:02'
-      const image = 'base64'
-      const comment = '성공!'
-      const location = '위치'
-      // 사진, 코멘트 저장
-      const recordRef = ref(this.$database, 'users/' + userKey + '/record')
-      const recordDateTimeRef = ref(this.$database, 'users/' + userKey + '/record' + recordDateTime)
-      set(recordRef, recordDateTime).then(() => {
-        push(recordDateTimeRef, {
-          image: image,
-          comment: comment,
-          location: location
+      if (this.isContentReady) {
+        const recordDateRef = ref(this.$database, 'users/' + this.userKey + '/record/' + this.recordDate)
+        set(recordDateRef, {
+          time: this.time,
+          image: this.base64Image,
+          comment: this.comment,
+          location: this.location
         }).then(() => {
-          alert('저장완료!')
+          this.$router.push({ name: 'Home' })
         }).catch((error) => console.log(error))
-      }).catch((error) => {
-        console.log(error)
-      })
-      // 기록 상세 dialog 테스트
-      // this.isRecordDialog = true
-    },
-    dbTest () {
-      // firebase 테스트
-      const userKey = '강슬기'
-      // const targetTime = '06:00'
-      const recordDateTime = '2022-06-18 06:02'
-      const image = 'base64image'
-      const comment = '미라클 모닝 두번째 성공!'
-      const location = '서울222'
-      // set(ref(this.$database, 'users/' + userKey + '/targetTime'), targetTime).then(() => console.log('success')).catch(() => console.log('error'))
-      // set(ref(this.$database, 'users/' + userKey + '/record'), recordDateTime).then(() => console.log('success')).catch(() => console.log('error'))
-      push(ref(this.$database, 'users/' + userKey + '/record/' + recordDateTime), {
-        image: image,
-        comment: comment,
-        location: location
-      }).then(() => console.log('success')).catch(() => console.log('error'))
+      } else {
+        alert('오류가 발생했습니다. 관리자에게 문의해주세요.')
+      }
     }
   }
 }
@@ -165,5 +129,16 @@ export default {
 .dialog-header-box {
   height: 15.55vw;
   font-size: 4.5vw;
+}
+
+.location-box {
+  .location-icon {
+    font-size: 1rem !important;
+    color: dodgerblue;
+  }
+  .location-title {
+    font-size: 0.85rem !important;
+    color: #656565
+  }
 }
 </style>

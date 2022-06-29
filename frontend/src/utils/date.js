@@ -10,5 +10,10 @@ export default {
   // ISO > YYYY-MM-DD
   getDashDate (dateISOString) {
     return dateISOString.substring(0, 10)
+  },
+  getAMPMTimeFrom24hTime (timeString) {
+    const hour = timeString.substring(0, 2)
+    if (hour < 12) return timeString + ' AM'
+    else return timeString + ' PM'
   }
 }

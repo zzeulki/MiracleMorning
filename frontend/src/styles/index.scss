@@ -52,6 +52,11 @@
 
 /* width */
 .width {
+  &-vw {
+    &-5 {
+      width: 5vw;
+    }
+  }
   &-p {
     &-5 {
       width: 5%;
@@ -733,5 +738,11 @@
         margin-bottom: 8.33vw;
       }
     }
+  }
+}
+
+.visibility {
+  &-hidden {
+    visibility: hidden !important;
   }
 }
