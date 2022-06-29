@@ -23,7 +23,8 @@ const routes = [
   Account.initSetRoute,
   // record
   Record.RecordDetailRoute,
-  Record.RecordCalendarRoute
+  Record.RecordCalendarRoute,
+  Record.RecordCameraRoute
 ]
 
 const router = new VueRouter({
