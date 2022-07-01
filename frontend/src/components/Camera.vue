@@ -5,31 +5,14 @@
         <video v-show="!isImageCaptured" id="video" ref="video" width="300" height="400" autoplay playsinline ></video>
         <canvas v-show="isImageCaptured" id="canvas" ref="canvas" width="300" height="400" ></canvas>
       </div>
-       <button v-if="!isImageCaptured" class="capture-btn" v-on:click="captureImage" >
+       <button v-if="!isImageCaptured" class="capture-btn" @click="captureImage" >
         <span>Capture</span>
-       </button>
-       <button v-show="isImageCaptured" class="image-download">
-        <a id="downloadImage" download="myImage.jpg" class="button" v-on:click="downloadImage">
-          Download
-        </a>
        </button>
     </div>
   </div>
 </template>
 
 <script>
-const userMedia = navigator.mediaDevices.getUserMedia({
-  audio: false,
-  video: {
-    facinMode: 'environment'
-  }
-})
-userMedia.then(function (stream) {
-  const video = document.getElementById('video')
-  video.srcObject = stream
-}).catch(function (error) {
-  console.error(error.message)
-})
 
 export default {
   name: 'Camera',
@@ -37,6 +20,20 @@ export default {
     return {
       isImageCaptured: false
     }
+  },
+  created: function () {
+    const userMedia = navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: {
+        facinMode: 'environment'
+      }
+    })
+    userMedia.then(function (stream) {
+      const video = document.getElementById('video')
+      video.srcObject = stream
+    }).catch(function (error) {
+      console.error(error.message)
+    })
   },
   methods: {
     captureImage: function () {
@@ -48,11 +45,8 @@ export default {
       tracks.forEach(track => {
         track.stop()
       })
-    },
-    downloadImage: function () {
-      const download = document.getElementById('downloadImage')
-      const canvas = document.getElementById('canvas').toDataURL('image/jpeg').replace('image/jpeg', 'image/octet-stream')
-      download.setAttribute('href', canvas)
+      const img = document.getElementById('canvas').toDataURL('image/jpeg').replace('image/jpeg', 'image/octet-stream')
+      this.$emit('captured', img)
     }
   }
 }
