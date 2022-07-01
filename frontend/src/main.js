@@ -6,6 +6,7 @@ import vuetify from './plugins/vuetify'
 import firebaseConfig from './plugins/firebaseConfig'
 import { initializeApp } from 'firebase/app'
 import { getDatabase } from 'firebase/database'
+import VueGeolocation from 'vue-geolocation-api'
 
 import './styles/index.scss'
 import './styles/common.scss'
@@ -17,6 +18,8 @@ const app = initializeApp(firebaseConfig)
 const database = getDatabase(app)
 
 Vue.prototype.$database = database
+
+Vue.use(VueGeolocation)
 
 new Vue({
   router,

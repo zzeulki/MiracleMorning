@@ -35,26 +35,40 @@
               :events="events"
               locale="ko"
               @change="getEvents"
+              @click:date="clickDay"
             ></v-calendar>
           </v-sheet>
         </v-col>
       </v-row>
     </div>
+    <record-dialog
+      :recordData="recordData"
+      :isOpenDialog="isOpenRecordDialog"
+      @closeDialog="closeRecordDialog"
+    ></record-dialog>
   </div>
 </template>
 
 <script>
 import DateUtils from '../utils/date' // 날짜 형식 변환 utils
+import { ref, get } from 'firebase/database'
+import RecordDialog from '../components/RecordDialog.vue'
 
 export default {
   name: 'RecordCalendar',
+  components: {
+    RecordDialog
+  },
   data () {
     return {
       type: 'month',
       weekday: [0, 1, 2, 3, 4, 5, 6],
       events: [],
       monthlyValue: '',
-      today: DateUtils.getDashDate((new Date()).toISOString()) // YYYY-MM-DD 형식의 오늘 날짜
+      today: DateUtils.getDashDate((new Date()).toISOString()), // YYYY-MM-DD 형식의 오늘 날짜
+      selectedDate: '',
+      isOpenRecordDialog: false,
+      recordData: {}
     }
   },
   computed: {
@@ -81,7 +95,29 @@ export default {
         color: 'red',
         timed: false
       })
-      this.events = events
+    },
+    clickDay (date) {
+      this.openRecordDialog(date.date)
+    },
+    openRecordDialog (date) {
+      // dialog open (ji)
+      const userKey = 'test'
+      const recordRef = ref(this.$database, 'users/' + userKey + '/record/' + date)
+      get(recordRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          this.isOpenRecordDialog = true
+          this.recordData = snapshot.val()
+          this.recordData.targetDate = date
+        } else {
+          alert('해당 날짜에 데이터가 존재하지 않습니다.')
+        }
+      }).catch((error) => {
+        console.error(error)
+      })
+    },
+    closeRecordDialog () {
+      this.isOpenRecordDialog = false
+      this.recordData = {}
     }
   },
   created () {

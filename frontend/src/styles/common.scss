@@ -1,5 +1,6 @@
 /* button */
 .dialog-close-btn {
+  position: fixed;
   width: 100%;
   padding: 0 2.77vw;
   margin-top: 2.77vw;
@@ -9,4 +10,17 @@
   border-radius: 10px !important;
   font-size: 5vw !important;
   font-weight: 600 !important;
+}
+
+.close-icon-btn {
+  width: fit-content !important;
+  height: fit-content !important;
+  min-width: 0 !important;
+  background-color:dodgerblue !important;
+  padding: 0 !important;
+  .v-icon {
+    font-size: 4.5vw !important; 
+    width: fit-content !important;
+    height: fit-content !important;  
+  }
 }

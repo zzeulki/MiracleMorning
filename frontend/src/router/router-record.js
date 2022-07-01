@@ -3,7 +3,7 @@ import RecordCalendarView from '../views/RecordCalendar'
 
 export default {
   RecordDetailRoute: {
-    path: '/record',
+    path: '/record/detail',
     name: 'RecordDetail',
     component: RecordDetailView,
     meta: {
