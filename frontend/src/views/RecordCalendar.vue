@@ -78,9 +78,8 @@ export default {
   },
   methods: {
     getEvents () {
-      const events = []
       // 이벤트 예시(성공)
-      events.push({
+      this.events.push({
         name: '성공',
         start: new Date('2022-06-15 00:00:00'),
         end: new Date('2022-06-15'),
@@ -88,7 +87,7 @@ export default {
         timed: false
       })
       // 이벤트 예시(실패)
-      events.push({
+      this.events.push({
         name: '실패',
         start: new Date('2022-06-17 00:00:00'),
         end: new Date('2022-06-17'),
@@ -101,6 +100,7 @@ export default {
     },
     openRecordDialog (date) {
       // dialog open (ji)
+      this.$startLoading()
       const userKey = 'test'
       const recordRef = ref(this.$database, 'users/' + userKey + '/record/' + date)
       get(recordRef).then((snapshot) => {
@@ -111,7 +111,9 @@ export default {
         } else {
           alert('해당 날짜에 데이터가 존재하지 않습니다.')
         }
+        this.$endLoading()
       }).catch((error) => {
+        this.$endLoading()
         console.error(error)
       })
     },

@@ -2,13 +2,17 @@
   <div class="all-layout p-a-vw-10">
     <!-- 사진, 코멘트 기록 확인 화면(ji) -->
     <div class="contents-box">
-      <div class="datetime-box align-a-center m-b-vw-5">{{ dateTimeTitle }}</div>
-      <div class="align-x-right align-y-center m-b-vw-5 location-box">
+      <!-- <div class="align-x-right align-y-center m-b-vw-5 location-box">
         <div class="align-a-center"><v-icon class="location-icon">place</v-icon></div>
         <div class="location-title">{{ location }}</div>
-      </div>
-      <div class="img-box m-y-vw-10 align-a-center">사진</div>
-      <div class="comment-box align-a-center">
+      </div> -->
+      <div class="img-box m-b-vw-10 align-a-center">사진</div>
+      <div class="subtitle text-bold">기록 날짜</div>
+      <div class="subtitle-content">{{ dateTitle }}</div>
+      <div class="subtitle text-bold">기록 시간</div>
+      <div class="subtitle-content">{{ timeTitle }}</div>
+      <div class="subtitle text-bold">메모</div>
+      <div class="comment-box align-a-center m-t-5">
         <v-textarea
           v-model="comment"
           outlined
@@ -16,14 +20,15 @@
           no-resize
           placeholder="내용을 입력하세요."
           counter
+          :color="keyColor.blue"
           :rules="rules.maxLength"
         ></v-textarea>
       </div>
     </div>
     <div class="completion-btn-box p-x-vw-10">
       <v-btn
+        :disabled="!isContentReady ? true : false "
         class="completion-btn"
-        dark
         depressed
         @click="saveRecord()"
       >완료</v-btn>
@@ -34,6 +39,9 @@
 <script>
 import { ref, set } from 'firebase/database'
 import DateUtils from '../utils/date'
+import color from '../styles/variables.scss'
+
+const keyColor = color
 
 export default {
   data () {
@@ -47,7 +55,8 @@ export default {
       rules: {
         maxLength: [value => value.length <= 200 || '200자까지 입력 가능합니다.']
       },
-      isRecordDialog: false
+      isRecordDialog: false,
+      keyColor: keyColor
     }
   },
   computed: {
@@ -55,13 +64,17 @@ export default {
       if (this.userKey === '' || this.recordDate === '' || this.base64Image === '' || this.location === '' || this.time === '') return false
       else return true
     },
-    dateTimeTitle () {
-      return DateUtils.convertKorDateFromDash(this.recordDate) + ' ' + DateUtils.getAMPMTimeFrom24hTime(this.time)
+    dateTitle () {
+      return DateUtils.convertKorDateFromDash(this.recordDate)
+    },
+    timeTitle () {
+      return DateUtils.getAMPMTimeFrom24hTime(this.time)
     }
   },
   methods: {
     saveRecord () {
       if (this.isContentReady) {
+        this.$startLoading()
         const recordDateRef = ref(this.$database, 'users/' + this.userKey + '/record/' + this.recordDate)
         set(recordDateRef, {
           time: this.time,
@@ -69,8 +82,12 @@ export default {
           comment: this.comment,
           location: this.location
         }).then(() => {
+          this.$endLoading()
           this.$router.push({ name: 'Home' })
-        }).catch((error) => console.log(error))
+        }).catch((error) => {
+          this.$endLoading()
+          console.log(error)
+        })
       } else {
         alert('오류가 발생했습니다. 관리자에게 문의해주세요.')
       }
@@ -80,14 +97,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/variables.scss';
+
 .all-layout {
   width: 100%;
   max-height: fit-content;
-
-  .datetime-box {
-    height: 12vw;
-    font-size: 4.5vw;
-  }
 
   .comment-box {
     height: fit-content;
@@ -103,7 +117,7 @@ export default {
       width: 100%;
       height: 14vw;
       min-height: 30px;
-      background-color:dodgerblue;
+      background-color: $key-color-blue;
       border-radius: 10px;
       font-size: 5vw;
       font-weight: 600;
@@ -134,11 +148,16 @@ export default {
 .location-box {
   .location-icon {
     font-size: 1rem !important;
-    color: dodgerblue;
+    color: $key-color-blue;
   }
   .location-title {
     font-size: 0.85rem !important;
-    color: #656565
+    color: gray;
   }
+}
+
+::v-deep .v-input__control > .v-input__slot > fieldset {
+  color: $key-color-blue !important;
+  border: 2px solid $key-color-blue !important;
 }
 </style>

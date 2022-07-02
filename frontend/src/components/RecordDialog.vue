@@ -4,10 +4,9 @@
     persistent
     transition="dialog-bottom-transition"
   >
-    <v-card>
+    <v-card class="dialog-card">
       <div class="align-y-center dialog-header-box p-a-0">
-        <div class="width-vw-5 visibility-hidden">x</div>
-        <div>{{ dateTimeTitle }}</div>
+        <v-spacer></v-spacer>
         <div class="width-vw-5 align-x-right">
           <v-btn
             depressed
@@ -20,13 +19,22 @@
           </v-btn>
         </div>
       </div>
-      <v-divider></v-divider>
       <div class="dialog-content-box">
-        <div class="align-x-right align-y-center m-b-vw-5 location-box">
+        <!-- <div class="align-x-right align-y-center m-b-vw-5 location-box">
           <div class="align-a-center"><v-icon class="location-icon">place</v-icon></div>
           <div class="location-title">{{ recordData.location }}</div>
-        </div>
+        </div> -->
         <div class="img-box m-b-vw-10 align-a-center">{{ recordData.image }}</div>
+        <div class="dialog-content-one-line m-b-vw-5">
+          <v-icon color="gray">event</v-icon>
+          <v-spacer></v-spacer>
+          {{ dateTitle }}
+        </div>
+        <div class="dialog-content-one-line m-b-vw-5">
+          <v-icon color="gray">schedule</v-icon>
+          <v-spacer></v-spacer>
+          {{ timeTitle }}
+        </div>
         <div class="comment-box align-a-center">
           <v-textarea
             v-model="recordData.comment"
@@ -35,6 +43,7 @@
             no-resize
             readonly
             hide-details
+            :color="keyColor.pink"
           ></v-textarea>
         </div>
       </div>
@@ -44,6 +53,9 @@
 
 <script>
 import DateUtils from '../utils/date'
+import color from '../styles/variables.scss'
+
+const keyColor = color
 
 export default {
   props: {
@@ -52,7 +64,8 @@ export default {
   },
   data () {
     return {
-      userKey: 'test' // 전역에서 구할 것
+      userKey: 'test', // 전역에서 구할 것
+      keyColor: keyColor
     }
   },
   computed: {
@@ -62,9 +75,14 @@ export default {
       },
       set () {}
     },
-    dateTimeTitle () {
-      if (typeof this.recordData.targetDate !== 'undefined' && typeof this.recordData.time !== 'undefined') {
-        return DateUtils.convertKorDateFromDash(this.recordData.targetDate) + ' ' + DateUtils.getAMPMTimeFrom24hTime(this.recordData.time)
+    dateTitle () {
+      if (typeof this.recordData.targetDate !== 'undefined') {
+        return DateUtils.convertKorDateFromDash(this.recordData.targetDate)
+      } else return ''
+    },
+    timeTitle () {
+      if (typeof this.recordData.time !== 'undefined') {
+        return DateUtils.getAMPMTimeFrom24hTime(this.recordData.time)
       } else return ''
     }
   }
@@ -72,12 +90,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/variables.scss';
+.dialog-card {
+  background-color: $key-color-light-pink !important;
+}
+
 .dialog-content-box {
   padding: 2.77vw !important;
 }
 
 .dialog-header-box {
-  height: 15.55vw;
+  // background-color: $key-color-pink;
+  height: fit-content;
+  padding: 10px;
+  padding-bottom: 0;
   font-size: 4.5vw;
   justify-content: space-evenly;
 }
@@ -103,7 +129,7 @@ export default {
     width: 100%;
     height: 14vw;
     min-height: 30px;
-    background-color:dodgerblue;
+    background-color: $key-color-blue;
     border-radius: 10px;
     font-size: 5vw;
     font-weight: 600;
@@ -113,11 +139,18 @@ export default {
 .location-box {
   .location-icon {
     font-size: 1rem !important;
-    color: dodgerblue;
+    color: $key-color-blue;
   }
   .location-title {
     font-size: 0.85rem !important;
     color: #656565
   }
+}
+
+::v-deep .v-input__control > .v-input__slot > fieldset {
+  color: $key-color-pink !important;
+  border: 2px solid $key-color-pink !important;
+  background-color: white !important;
+  border-radius: 10px !important;
 }
 </style>
