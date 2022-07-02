@@ -78,8 +78,9 @@ export default {
   },
   methods: {
     getEvents () {
+      const events = []
       // 이벤트 예시(성공)
-      this.events.push({
+      events.push({
         name: '성공',
         start: new Date('2022-06-15 00:00:00'),
         end: new Date('2022-06-15'),
@@ -87,13 +88,14 @@ export default {
         timed: false
       })
       // 이벤트 예시(실패)
-      this.events.push({
+      events.push({
         name: '실패',
         start: new Date('2022-06-17 00:00:00'),
         end: new Date('2022-06-17'),
         color: 'red',
         timed: false
       })
+      this.events = events
     },
     clickDay (date) {
       this.openRecordDialog(date.date)
