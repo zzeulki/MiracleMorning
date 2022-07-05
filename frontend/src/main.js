@@ -9,7 +9,6 @@ import { getDatabase } from 'firebase/database'
 import VueGeolocation from 'vue-geolocation-api'
 
 import './styles/index.scss'
-import './styles/common.scss'
 
 Vue.config.productionTip = false
 

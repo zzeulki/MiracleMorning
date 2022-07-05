@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 /* button */
 .dialog-close-btn {
   position: fixed;
@@ -6,7 +8,7 @@
   margin-top: 2.77vw;
   height: 14vw !important;
   min-height: 30px !important;
-  background-color:dodgerblue !important;
+  // background-color: $key-color-blue !important;
   border-radius: 10px !important;
   font-size: 5vw !important;
   font-weight: 600 !important;
@@ -16,11 +18,47 @@
   width: fit-content !important;
   height: fit-content !important;
   min-width: 0 !important;
-  background-color:dodgerblue !important;
+  background-color: transparent !important;
   padding: 0 !important;
+  // border: 1.5px solid gray;
   .v-icon {
     font-size: 4.5vw !important; 
     width: fit-content !important;
-    height: fit-content !important;  
+    height: fit-content !important;
+    color: gray !important;
+  }
+}
+
+/* subtitle */
+.subtitle {
+  background-color: $key-color-light-blue;
+  height: 11.5vw;
+  display: flex;
+  align-items: center;
+  padding-left: 4vw;
+
+  &-content {
+    height: 11.5vw;
+    display: flex;
+    align-items: center;
+    padding-left: 4vw;
+  }
+}
+
+.dialog-content-one-line {
+  background-color:white;
+  height: 11.5vw;
+  display: flex;
+  align-items: center;
+  padding: 0 4vw;
+  // border-left: 8px solid $key-color-pink;
+  border-radius: 10px;
+  border: 2px solid $key-color-pink;
+}
+
+/* text */
+.text {
+  &-bold {
+    font-weight: 600;
   }
 }

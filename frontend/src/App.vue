@@ -1,5 +1,7 @@
 <template>
-    <v-app>
+  <v-app>
+    <progress-bar v-if="isLoading"></progress-bar>
+    <div>
       <the-header
         v-if="isVisibleHeader"
         :headerTitle="headerTitle"
@@ -11,25 +13,35 @@
       </transition>
       </v-main>
       <bottom-navigation v-if="isVisibleBottomNavigation"></bottom-navigation>
-    </v-app>
+    </div>
+  </v-app>
 </template>
 
 <script>
+import Vue from 'vue'
 import TheHeader from './components/Header.vue'
 import BottomNavigation from './components/BottomNavigation.vue'
+import ProgressBar from './components/ProgressBar.vue'
+import eventBus from './utils/eventBus'
+
+// loading
+Vue.prototype.$startLoading = () => { eventBus.$emit('startLoading') }
+Vue.prototype.$endLoading = () => { eventBus.$emit('endLoading') }
 
 export default {
   name: 'App',
   components: {
     TheHeader,
-    BottomNavigation
+    BottomNavigation,
+    ProgressBar
   },
   data () {
     return {
       isVisibleHeader: false,
       isVisibleBackBtn: false,
       isVisibleBottomNavigation: false,
-      headerTitle: ''
+      headerTitle: '',
+      isLoading: false
     }
   },
   watch: {
@@ -47,6 +59,12 @@ export default {
   },
   created () {
     this.initMethod()
+    eventBus.$on('startLoading', () => {
+      this.isLoading = true
+    })
+    eventBus.$on('endLoading', () => {
+      this.isLoading = false
+    })
   }
 }
 </script>

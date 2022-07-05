@@ -95,12 +95,14 @@ export default {
         color: 'red',
         timed: false
       })
+      this.events = events
     },
     clickDay (date) {
       this.openRecordDialog(date.date)
     },
     openRecordDialog (date) {
       // dialog open (ji)
+      this.$startLoading()
       const userKey = 'test'
       const recordRef = ref(this.$database, 'users/' + userKey + '/record/' + date)
       get(recordRef).then((snapshot) => {
@@ -111,7 +113,9 @@ export default {
         } else {
           alert('해당 날짜에 데이터가 존재하지 않습니다.')
         }
+        this.$endLoading()
       }).catch((error) => {
+        this.$endLoading()
         console.error(error)
       })
     },
