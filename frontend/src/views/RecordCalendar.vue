@@ -79,21 +79,19 @@ export default {
   methods: {
     getEvents () {
       const events = []
-      // 이벤트 예시(성공)
-      events.push({
-        name: '성공',
-        start: new Date('2022-06-15 00:00:00'),
-        end: new Date('2022-06-15'),
-        color: 'orange',
-        timed: false
-      })
-      // 이벤트 예시(실패)
-      events.push({
-        name: '실패',
-        start: new Date('2022-06-17 00:00:00'),
-        end: new Date('2022-06-17'),
-        color: 'red',
-        timed: false
+      const userKey = 'test'
+      const recordRef = ref(this.$database, 'users/' + userKey + '/record/')
+      get(recordRef).then((snapshot) => {
+        var dateArr = Object.keys(snapshot.val())
+        for (var i = 0; i < dateArr.length; i++) {
+          events.push({
+            name: '성공',
+            start: new Date(dateArr[i] + ' 00:00:00'),
+            end: new Date(dateArr[i]),
+            color: '#F2D1D1',
+            timed: false
+          })
+        }
       })
       this.events = events
     },
