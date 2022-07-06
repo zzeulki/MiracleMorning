@@ -20,8 +20,8 @@
           no-resize
           placeholder="내용을 입력하세요."
           counter
-          :color="keyColor.blue"
           :rules="rules.maxLength"
+          :color="'#C6DCE4'"
         ></v-textarea>
       </div>
     </div>
@@ -39,9 +39,6 @@
 <script>
 import { ref, set } from 'firebase/database'
 import DateUtils from '../utils/date'
-import color from '../styles/variables.scss'
-
-const keyColor = color
 
 export default {
   data () {
@@ -55,8 +52,7 @@ export default {
       rules: {
         maxLength: [value => value.length <= 200 || '200자까지 입력 가능합니다.']
       },
-      isRecordDialog: false,
-      keyColor: keyColor
+      isRecordDialog: false
     }
   },
   computed: {
@@ -97,7 +93,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/variables.scss';
+@import '@/styles/_color.scss';
 
 .all-layout {
   width: 100%;
