@@ -43,7 +43,7 @@
             no-resize
             readonly
             hide-details
-            :color="keyColor.pink"
+            :color="'#F2D1D1'"
           ></v-textarea>
         </div>
       </div>
@@ -53,9 +53,6 @@
 
 <script>
 import DateUtils from '../utils/date'
-import color from '../styles/variables.scss'
-
-const keyColor = color
 
 export default {
   props: {
@@ -64,8 +61,7 @@ export default {
   },
   data () {
     return {
-      userKey: 'test', // 전역에서 구할 것
-      keyColor: keyColor
+      userKey: 'test' // 전역에서 구할 것
     }
   },
   computed: {
@@ -90,7 +86,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/variables.scss';
+@import '@/styles/_color.scss';
 .dialog-card {
   background-color: $key-color-light-pink !important;
 }

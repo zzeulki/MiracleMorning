@@ -4,23 +4,13 @@
       :size="100"
       :width="8"
       indeterminate
-      :color="keyColor.blue"
+      :color="'#C6DCE4'"
     ></v-progress-circular>
   </div>
 </template>
 
 <script>
-import color from '../styles/variables.scss'
-
-const keyColor = color
-
 export default {
-  data () {
-    return {
-      keyColor: keyColor
-    }
-  }
-
 }
 </script>
 
