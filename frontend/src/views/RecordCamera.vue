@@ -1,15 +1,18 @@
 <template>
-    <camera-view v-on:captured="movePage(img)"></camera-view>
+  <camera-view v-on:sendImage="movePage('RecordDetail')"></camera-view>
 </template>
 
 <script>
 import Camera from '../components/Camera.vue'
+import eventBus from '../utils/eventBus'
+import dateUtils from '../utils/date'
 
+let myimage = ''
 export default {
   name: 'RecordCamera',
   data () {
     return {
-      img: '',
+      currentDate: '',
       currentTime: '',
       currentLocation: {
         latitude: '',
@@ -21,18 +24,24 @@ export default {
     'camera-view': Camera
   },
   methods: {
-    movePage (name, img) {
-      this.img = img
-      this.currentTime = new Date()
-      navigator.geolocation.getCurrentPosition(pos => {
-        this.latitude = pos.coords.latitude
-        this.longitude = pos.coords.longitude
-      })
-      console.log(this.currentTime)
-      console.log(this.currentLocation)
-      console.log('show RecordDetailView')
-      // if (name !== this.$route.name) this.$router.push({ name: name, params: { imgage: img } })
+    movePage (name) {
+      const today = new Date()
+      this.currentDate = dateUtils.getDashDate(today.toISOString())
+      this.currentTime = dateUtils.getSimpleTime(today)
+      if (name !== this.$route.name) {
+        this.$router.push(
+          { name: name, params: { image: myimage, currentDate: this.currentDate, currentTime: this.currentTime, currentLocation: this.currentLocation } })
+      }
     }
+  },
+  mounted: function () {
+    eventBus.$on('captured', function (img) {
+      myimage = img
+    })
+    navigator.geolocation.getCurrentPosition(pos => {
+      this.currentLocation.latitude = pos.coords.latitude
+      this.currentLocation.longitude = pos.coords.longitude
+    })
   }
 }
 </script>

@@ -32,7 +32,6 @@ export default {
   },
   created () {
     const date = new Date()
-    console.log(date)
     this.mon = date.getMonth() + 1
     this.day = date.getDate()
     const week = ['일', '월', '화', '수', '목', '금', '토']

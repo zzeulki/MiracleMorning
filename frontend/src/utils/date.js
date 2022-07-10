@@ -15,5 +15,15 @@ export default {
     const hour = timeString.substring(0, 2)
     if (hour < 12) return timeString + ' AM'
     else return timeString + ' PM'
+  },
+  // HH:MM
+  getSimpleTime (timeString) {
+    let hrs = timeString.getHours()
+    let min = timeString.getMinutes()
+    hrs = hrs < 10 ? `${hrs}`.padStart(2, 0) : hrs
+    min = min < 10 ? `${min}`.padStart(2, 0) : min
+    this.hrs = hrs
+    this.min = min
+    return hrs + ':' + min
   }
 }

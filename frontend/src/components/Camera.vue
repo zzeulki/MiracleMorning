@@ -2,8 +2,8 @@
   <div class="camera-view">
     <div class="wrapper">
       <div class="video-container">
-        <video v-show="!isImageCaptured" id="video" ref="video" width="300" height="400" autoplay playsinline ></video>
-        <canvas v-show="isImageCaptured" id="canvas" ref="canvas" width="300" height="400" ></canvas>
+        <video v-show="!isImageCaptured" id="video" ref="video" width="300" height="300" autoplay playsinline ></video>
+        <canvas v-show="isImageCaptured" id="canvas" ref="canvas" width="300" height="300" ></canvas>
       </div>
        <button v-if="!isImageCaptured" class="capture-btn" @click="captureImage" >
         <span>Capture</span>
@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import eventBus from '../utils/eventBus'
 
 export default {
   name: 'Camera',
@@ -40,13 +41,14 @@ export default {
       this.isImageCaptured = true
       const context = this.$refs.canvas.getContext('2d')
       const myImage = this.$refs.video
-      context.drawImage(myImage, 0, 0, 300, 400)
+      context.drawImage(myImage, 0, 0, 300, 300)
       const tracks = this.$refs.video.srcObject.getTracks()
       tracks.forEach(track => {
         track.stop()
       })
       const img = document.getElementById('canvas').toDataURL('image/jpeg').replace('image/jpeg', 'image/octet-stream')
-      this.$emit('captured', img)
+      eventBus.$emit('captured', img)
+      this.$emit('sendImage')
     }
   }
 }
