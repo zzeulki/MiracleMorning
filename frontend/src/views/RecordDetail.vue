@@ -6,7 +6,9 @@
         <div class="align-a-center"><v-icon class="location-icon">place</v-icon></div>
         <div class="location-title">{{ location }}</div>
       </div> -->
-      <div class="img-box m-b-vw-10 align-a-center">사진</div>
+      <div class="img-box m-b-vw-10 align-a-center">
+        <img id="image" />
+      </div>
       <div class="subtitle text-bold">기록 날짜</div>
       <div class="subtitle-content">{{ dateTitle }}</div>
       <div class="subtitle text-bold">기록 시간</div>
@@ -41,12 +43,16 @@ import { ref, set } from 'firebase/database'
 import DateUtils from '../utils/date'
 
 export default {
+  name: 'RecordDetail',
   data () {
     return {
-      recordDate: '2022-07-02', // 전달받아야 할 것
-      base64Image: '굿모닝사진', // 전달받아야 할 것
-      location: '서울 @@구 @@동 123', // 전달받아야 할 것
-      time: '05:00', // 전달받아야 할 것
+      recordDate: '', // 전달받아야 할 것
+      base64Image: '', // 전달받아야 할 것
+      location: {
+        latitude: '',
+        longitude: ''
+      },
+      time: '', // 전달받아야 할 것
       comment: '',
       userKey: 'test', // 전역에서 구할 것
       rules: {
@@ -55,13 +61,43 @@ export default {
       isRecordDialog: false
     }
   },
+  props: {
+    image: {
+      type: String,
+      default: ''
+    },
+    currentDate: {
+      type: String,
+      default: ''
+    },
+    currentTime: {
+      type: String,
+      default: ''
+    },
+    currentLocation: {
+      type: Object,
+      default: () => {
+        return {
+          latitude: '',
+          longitude: ''
+        }
+      }
+    }
+  },
+  mounted: function () {
+    this.base64Image = this.$route.params.image
+    this.recordDate = this.$route.params.currentDate
+    this.time = this.$route.params.currentTime
+    this.location = this.$route.params.currentLocation
+    document.getElementById('image').src = this.base64Image
+  },
   computed: {
     isContentReady () {
       if (this.userKey === '' || this.recordDate === '' || this.base64Image === '' || this.location === '' || this.time === '') return false
       else return true
     },
     dateTitle () {
-      return DateUtils.convertKorDateFromDash(this.recordDate)
+      return this.recordDate
     },
     timeTitle () {
       return DateUtils.getAMPMTimeFrom24hTime(this.time)

@@ -12,7 +12,8 @@ export default {
       isVisibleHeader: true,
       isVisibleBackBtn: true,
       isVisibleBottomNavigation: true
-    }
+    },
+    props: true
   },
 
   RecordCalendarRoute: {
