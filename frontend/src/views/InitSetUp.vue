@@ -53,7 +53,8 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+@import '@/styles/_color.scss';
 .init_account{
   margin-top:20vh;
   padding:10%;
@@ -73,8 +74,8 @@ export default {
     font-family: sans-serif;
     vertical-align: middle;
 }
-.vue__time-picker input.display-time {
-    border: 2px solid #a2d2d2;
+::v-deep.vue__time-picker input.display-time {
+    border: 2px solid $key-color-blue !important;
     width: 8.2em;
     height: 2em;
     padding: 0.2em 1.6em;
@@ -86,11 +87,21 @@ export default {
   height: 14vw;
   margin-left : 70%;
   min-height: 30px;
-  background-color:dodgerblue !important;
+  background-color:$key-color-blue !important;
+  color : gray;
   border-radius: 10px;
   margin-top : 1em;
   font-size: 5vw;
   font-weight: 600;
+}
+::v-deep.vue__time-picker .dropdown ul li:not([disabled]).active,
+::v-deep.vue__time-picker .dropdown ul li:not([disabled]).active:hover,
+::v-deep.vue__time-picker .dropdown ul li:not([disabled]).active:focus,
+::v-deep.vue__time-picker-dropdown ul li:not([disabled]).active,
+::v-deep.vue__time-picker-dropdown ul li:not([disabled]).active:hover,
+::v-deep.vue__time-picker-dropdown ul li:not([disabled]).active:focus {
+    background: #21A9BF !important;
+    color: #fff;
 }
 
 </style>
