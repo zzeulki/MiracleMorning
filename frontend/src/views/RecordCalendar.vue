@@ -28,12 +28,16 @@
           </v-sheet>
           <v-sheet height="400">
             <v-calendar
+              id='v-calendar'
               ref="calendar"
               v-model="monthlyValue"
+              locale="ko"
               :weekdays="weekday"
               :type="type"
               :events="events"
-              locale="ko"
+              :show-month-on-first="false"
+              :event-more="false"
+              :event-height=18
               @change="getEvents"
               @click:date="clickDay"
             ></v-calendar>
@@ -129,5 +133,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+@import '@/styles/_color.scss';
+div.v-event.v-event-start.v-event-end.white--text{
+  width: 10%;
+}
+::v-deep.v-calendar.v-event{
+  width: 100% !important;
+  color: blue;
+}
+::v-deep.v-size--small{
+  height: 30px;
+}
+::v-deep.v-application.white--text{
+  color: black !important;
+}
 </style>
