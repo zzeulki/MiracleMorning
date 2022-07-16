@@ -26,7 +26,7 @@ export default {
   methods: {
     movePage (name) {
       const today = new Date()
-      this.currentDate = dateUtils.getDashDate(today.toISOString())
+      this.currentDate = dateUtils.getDashDate(today)
       this.currentTime = dateUtils.getSimpleTime(today)
       if (name !== this.$route.name) {
         this.$router.push(

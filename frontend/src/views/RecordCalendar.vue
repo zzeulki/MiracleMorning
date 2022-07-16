@@ -69,7 +69,7 @@ export default {
       weekday: [0, 1, 2, 3, 4, 5, 6],
       events: [],
       monthlyValue: '',
-      today: DateUtils.getDashDate((new Date()).toISOString()), // YYYY-MM-DD 형식의 오늘 날짜
+      today: DateUtils.getDashDate((new Date())), // YYYY-MM-DD 형식의 오늘 날짜
       selectedDate: '',
       isOpenRecordDialog: false,
       recordData: {}
