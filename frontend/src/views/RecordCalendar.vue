@@ -85,16 +85,35 @@ export default {
       const events = []
       const userKey = 'test'
       const recordRef = ref(this.$database, 'users/' + userKey + '/record/')
+      const targetTimeRef = ref(this.$database, 'users/' + userKey + '/targetTime/')
+      var targetTime = ''
+      get(targetTimeRef).then((snapshot) => {
+        targetTime = snapshot.val()
+      })
       get(recordRef).then((snapshot) => {
         var dateArr = Object.keys(snapshot.val())
+        var valueArr = Object.values(snapshot.val())
+        targetTime = this.getDate(String(targetTime).substring(0, 5))
         for (var i = 0; i < dateArr.length; i++) {
-          events.push({
-            name: '성공',
-            start: new Date(dateArr[i] + ' 00:00:00'),
-            end: new Date(dateArr[i]),
-            color: '#F2D1D1',
-            timed: false
-          })
+          var currentTime = this.getDate(valueArr[i].time)
+          var gapTime = (currentTime.getTime() - targetTime.getTime()) / (1000 * 60) // 분 차이
+          if (gapTime < 10) { // 차이가 10분보다 적게 날 시 성공
+            events.push({
+              name: '성공',
+              start: new Date(dateArr[i] + ' 00:00:00'),
+              end: new Date(dateArr[i]),
+              color: '#C6DCE4',
+              timed: false
+            })
+          } else {
+            events.push({
+              name: '실패',
+              start: new Date(dateArr[i] + ' 00:00:00'),
+              end: new Date(dateArr[i]),
+              color: '#F2D1D1',
+              timed: false
+            })
+          }
         }
       })
       this.events = events
@@ -124,6 +143,11 @@ export default {
     closeRecordDialog () {
       this.isOpenRecordDialog = false
       this.recordData = {}
+    },
+    getDate (curTime) {
+      var newDate = new Date()
+      var currentTime = new Date(newDate.getFullYear() + '-' + (newDate.getMonth() + 1) + '-' + newDate.getDate() + '-' + curTime + ':00')
+      return currentTime
     }
   },
   created () {
@@ -134,17 +158,8 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/styles/_color.scss';
-div.v-event.v-event-start.v-event-end.white--text{
-  width: 10%;
-}
-::v-deep.v-calendar.v-event{
+::v-deep .v-calendar .v-event{
   width: 100% !important;
-  color: blue;
-}
-::v-deep.v-size--small{
-  height: 30px;
-}
-::v-deep.v-application.white--text{
-  color: black !important;
+  color: gray !important;
 }
 </style>
