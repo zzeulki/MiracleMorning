@@ -1,6 +1,7 @@
 <template>
   <v-bottom-navigation
     v-model="naviPosition"
+    :color="this.$colors.success1"
     class="bottom-navi"
     grow
   >
@@ -18,9 +19,14 @@
 
 <script>
 export default {
-  data () {
-    return {
-      naviPosition: 'home'
+  computed: {
+    naviPosition: {
+      get () {
+        if (this.$route.name === 'Home') return 'home'
+        else if (this.$route.name === 'RecordCalendar') return 'calendar'
+        else return ''
+      },
+      set () {}
     }
   },
   methods: {

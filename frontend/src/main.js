@@ -9,6 +9,8 @@ import { getDatabase } from 'firebase/database'
 import VueGeolocation from 'vue-geolocation-api'
 
 import './styles/index.scss'
+import colors from './styles/_color.scss'
+Vue.prototype.$colors = colors
 
 Vue.config.productionTip = false
 

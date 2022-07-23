@@ -2,7 +2,7 @@
   <div>
     <!-- Todo: Show Current Time -->
     <clock-view />
-    <div class="miracle-morning-btn-box">
+    <div class="miracle-morning-btn-box p-x-vw-10">
       <v-btn class="miracle-morning-btn" @click="movePage('RecordCamera')">오늘의 사진 찍기</v-btn>
     </div>
   </div>
@@ -25,6 +25,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/_color.scss';
+
 .miracle-morning-btn-box {
   width: 100%;
   position: fixed;
@@ -34,8 +36,8 @@ export default {
     width: 100%;
     height: 14vw;
     min-height: 30px;
-    background-color:dodgerblue;
-    border-radius: 50px;
+    background-color: $blue-success-1;
+    border-radius: 10px;
     font-size: 5vw;
     font-weight: 600;
   }

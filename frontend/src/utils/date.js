@@ -14,9 +14,16 @@ export default {
     return dateOffset.toISOString().substring(0, 10)
   },
   getAMPMTimeFrom24hTime (timeString) {
-    const hour = timeString.substring(0, 2)
-    if (hour < 12) return timeString + ' AM'
-    else return timeString + ' PM'
+    const time = timeString.split(':')
+    let hour = time[0]
+    const minute = time[1]
+    let timeType = ' AM'
+    if (parseInt(hour) > 12) {
+      hour = hour - 12
+      timeType = ' PM'
+    }
+    hour = hour < 10 ? `${hour}`.padStart(2, 0) : hour
+    return hour + ':' + minute + timeType
   },
   // HH:MM
   getSimpleTime (timeString) {
@@ -27,5 +34,19 @@ export default {
     this.hrs = hrs
     this.min = min
     return hrs + ':' + min
+  },
+  getStartEndDateOfMonth (dateString) {
+    const noDash = dateString.split('-')
+    const month = noDash[1]
+    const year = noDash[0]
+    const startDate = new Date(year, month - 1, 1)
+    const endDate = new Date(year, month, 0)
+    return { startDate: this.getDashDate(startDate), endDate: this.getDashDate(endDate) }
+  },
+  getHourMinuteFromTimeString (timeString) {
+    const time = timeString.split(':')
+    const hour = time[0]
+    const minute = time[1]
+    return { hour: parseInt(hour), minute: parseInt(minute) }
   }
 }

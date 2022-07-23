@@ -5,9 +5,11 @@
     transition="dialog-bottom-transition"
   >
     <v-card class="dialog-card">
-      <div class="align-y-center dialog-header-box p-a-0">
+      <div class="align-a-center dialog-header-box">
+        <v-icon class="m-l-vw-5 sentimation-icon" :color="getTypeStyle(this.recordData.type).color">{{ getTypeStyle(this.recordData.type).icon }}</v-icon>
+        <div class="m-l-vw-10 text-bold">{{ dateTitle }}</div>
         <v-spacer></v-spacer>
-        <div class="width-vw-5 align-x-right">
+        <div class="align-x-right">
           <v-btn
             depressed
             dark
@@ -19,32 +21,34 @@
           </v-btn>
         </div>
       </div>
+      <div class="align-a-center p-x-vw-16">
+        <!-- <v-divider :style="'border-color: ' + getTypeStyle(this.recordData.type).color"></v-divider> -->
+        <v-divider></v-divider>
+      </div>
       <div class="dialog-content-box">
         <!-- <div class="align-x-right align-y-center m-b-vw-5 location-box">
           <div class="align-a-center"><v-icon class="location-icon">place</v-icon></div>
           <div class="location-title">{{ recordData.location }}</div>
         </div> -->
-        <div class="img-box m-b-vw-10 align-a-center">{{ recordData.image }}</div>
-        <div class="dialog-content-one-line m-b-vw-5">
-          <v-icon color="gray">event</v-icon>
+        <div class="align-y-center m-t-vw-5">
           <v-spacer></v-spacer>
-          {{ dateTitle }}
+          <div class="time-box">{{ timeTitle }}</div>
         </div>
-        <div class="dialog-content-one-line m-b-vw-5">
-          <v-icon color="gray">schedule</v-icon>
-          <v-spacer></v-spacer>
-          {{ timeTitle }}
+        <div class="m-b-vw-10 align-a-center">
+          <img v-if="recordData.detail.image && recordData.detail.image.includes('base64')" :src="recordData.detail.image" width="100%">
+          <div v-else><v-icon>no_photography</v-icon></div>
         </div>
-        <div class="comment-box align-a-center">
-          <v-textarea
-            v-model="recordData.comment"
-            outlined
-            rows="6"
-            no-resize
-            readonly
-            hide-details
-            :color="'#F2D1D1'"
-          ></v-textarea>
+        <div :style="'border-radius: 3vw; border: 1px solid' + getTypeStyle(this.recordData.type).color">
+          <div class="comment-box align-a-center">
+            <v-textarea
+              v-model="recordData.detail.comment"
+              outlined
+              rows="6"
+              no-resize
+              readonly
+              hide-details
+            ></v-textarea>
+          </div>
         </div>
       </div>
     </v-card>
@@ -57,7 +61,8 @@ import DateUtils from '../utils/date'
 export default {
   props: {
     recordData: Object,
-    isOpenDialog: Boolean
+    isOpenDialog: Boolean,
+    typeColor: Object
   },
   data () {
     return {
@@ -72,14 +77,32 @@ export default {
       set () {}
     },
     dateTitle () {
-      if (typeof this.recordData.targetDate !== 'undefined') {
-        return DateUtils.convertKorDateFromDash(this.recordData.targetDate)
+      if (typeof this.recordData.date !== 'undefined') {
+        return DateUtils.convertKorDateFromDash(this.recordData.date)
       } else return ''
     },
     timeTitle () {
-      if (typeof this.recordData.time !== 'undefined') {
-        return DateUtils.getAMPMTimeFrom24hTime(this.recordData.time)
+      if (typeof this.recordData.detail.time !== 'undefined') {
+        return DateUtils.getAMPMTimeFrom24hTime(this.recordData.detail.time)
       } else return ''
+    }
+  },
+  methods: {
+    getTypeStyle (type) {
+      const style = {
+        color: '',
+        icon: ''
+      }
+      if (type === 'S') {
+        style.color = this.typeColor[type]
+        style.icon = 'sentiment_very_satisfied'
+      } else {
+        style.color = this.typeColor.F1
+        if (type === 'F1') style.icon = 'sentiment_neutral'
+        else if (type === 'F2') style.icon = 'sentiment_dissatisfied'
+        else style.icon = 'sentiment_very_dissatisfied'
+      }
+      return style
     }
   }
 }
@@ -88,47 +111,38 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/_color.scss';
 .dialog-card {
-  background-color: $key-color-light-pink !important;
+  font-size: 4.3vw !important;
 }
 
 .dialog-content-box {
-  padding: 2.77vw !important;
+  padding: 4.44vw !important;
+  padding-top: 0 !important;
 }
 
 .dialog-header-box {
-  // background-color: $key-color-pink;
   height: fit-content;
-  padding: 10px;
-  padding-bottom: 0;
-  font-size: 4.5vw;
+  padding: 2.77vw 4.44vw;
+  font-size: 4.8vw;
   justify-content: space-evenly;
 }
 
-.img-box {
-  height: 70vw !important;
-  border: 1px solid black;
-  background-color: black;
-  color: white;
+.time-box {
+  font-size: 3.8vw;
+}
+
+.sentimation-icon {
+  font-size: 6.5vw;
 }
 
 .comment-box {
   height: fit-content;
-  // margin-bottom: calc(15.55vw + 2.77vw + 14vw);
-}
+  ::v-deep .v-text-field > .v-input__control > .v-input__slot > .v-text-field__slot {
+    font-size: 3.8vw !important;
+  }
 
-.completion-btn-box {
-  width: 100%;
-  position: fixed;
-  bottom: calc(15.55vw + 2.77vw);
-  right: 0;
-  .completion-btn {
-    width: 100%;
-    height: 14vw;
-    min-height: 30px;
-    background-color: $key-color-blue;
-    border-radius: 10px;
-    font-size: 5vw;
-    font-weight: 600;
+  ::v-deep .v-textarea textarea {
+    line-height: 1.2rem;
+    margin: 2vw 0 !important;
   }
 }
 
@@ -145,8 +159,8 @@ export default {
 
 ::v-deep .v-input__control > .v-input__slot > fieldset {
   color: $key-color-pink !important;
-  border: 2px solid $key-color-pink !important;
-  background-color: white !important;
-  border-radius: 10px !important;
+  border: none !important;
+  background-color: transparent !important;
+  border-radius: 2vw !important;
 }
 </style>

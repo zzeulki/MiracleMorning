@@ -23,7 +23,7 @@ export default {
     meta: {
       title: '캘린더',
       isVisibleHeader: true,
-      isVisibleBackBtn: true,
+      isVisibleBackBtn: false,
       isVisibleBottomNavigation: true
     }
   },

@@ -11,8 +11,8 @@
       <transition name="slide-fade" mode="out-in">
         <router-view/>
       </transition>
-      </v-main>
       <bottom-navigation v-if="isVisibleBottomNavigation"></bottom-navigation>
+      </v-main>
     </div>
   </v-app>
 </template>

@@ -1,8 +1,8 @@
 <template>
   <div class="loading-layout align-a-center">
     <v-progress-circular
-      :size="100"
-      :width="8"
+      :size="60"
+      :width="7"
       indeterminate
       :color="'#C6DCE4'"
     ></v-progress-circular>

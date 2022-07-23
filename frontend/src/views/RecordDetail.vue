@@ -6,26 +6,36 @@
         <div class="align-a-center"><v-icon class="location-icon">place</v-icon></div>
         <div class="location-title">{{ location }}</div>
       </div> -->
-      <div class="img-box m-b-vw-10 align-a-center">
-        <img id="image" />
-      </div>
-      <div class="subtitle text-bold">기록 날짜</div>
-      <div class="subtitle-content">{{ dateTitle }}</div>
-      <div class="subtitle text-bold">기록 시간</div>
-      <div class="subtitle-content">{{ timeTitle }}</div>
-      <div class="subtitle text-bold">메모</div>
-      <div class="comment-box align-a-center m-t-5">
-        <v-textarea
-          v-model="comment"
-          outlined
-          rows="6"
-          no-resize
-          placeholder="내용을 입력하세요."
-          counter
-          :rules="rules.maxLength"
-          :color="'#C6DCE4'"
-        ></v-textarea>
-      </div>
+      <v-layout column>
+        <div class="m-b-vw-10 align-a-center">
+          <img id="image" width="100%" />
+        </div>
+        <div class="subtitle">
+          <div class="text-bold width-p-20">날짜</div>
+          <div>{{ dateTitle }}</div>
+        </div>
+        <v-divider></v-divider>
+        <div class="subtitle">
+          <div class="text-bold width-p-20">시간</div>
+          <div>{{ timeTitle }}</div>
+        </div>
+        <v-divider></v-divider>
+        <div class="align-x-center">
+          <div class="text-bold width-p-20 subtitle">메모</div>
+          <div class="comment-box width-p-80 align-a-center m-t-5">
+            <v-textarea
+              v-model="comment"
+              outlined
+              rows="6"
+              no-resize
+              placeholder="내용을 입력하세요."
+              counter
+              :rules="rules.maxLength"
+              :color="'#C6DCE4'"
+            ></v-textarea>
+          </div>
+        </div>
+      </v-layout>
     </div>
     <div class="completion-btn-box p-x-vw-10">
       <v-btn
@@ -135,9 +145,29 @@ export default {
   width: 100%;
   max-height: fit-content;
 
+  .contents-box {
+    font-size: 3.8vw;
+  }
+
   .comment-box {
     height: fit-content;
     margin-bottom: calc(15.55vw + 2.77vw + 14vw);
+    ::v-deep .v-text-field > .v-input__control > .v-input__slot > .v-text-field__slot {
+      font-size: 3.8vw !important;
+    }
+
+    ::v-deep .v-textarea textarea {
+      line-height: 1.2rem;
+      margin: 2vw 0 !important;
+    }
+
+    ::v-deep .v-text-field__details {
+      margin-top: -5px;
+    }
+
+    ::v-deep .v-counter {
+      font-size: 3vw;
+    }
   }
 
   .completion-btn-box {
@@ -149,7 +179,7 @@ export default {
       width: 100%;
       height: 14vw;
       min-height: 30px;
-      background-color: $key-color-blue;
+      background-color: $blue-success-1;
       border-radius: 10px;
       font-size: 5vw;
       font-weight: 600;
@@ -159,13 +189,6 @@ export default {
 
 .v-card__actions {
   padding: 0 !important;
-}
-
-.img-box {
-  height: 70vw !important;
-  border: 1px solid black;
-  background-color: black;
-  color: white;
 }
 
 .dialog-content-box {
